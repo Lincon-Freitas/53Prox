@@ -1,16 +1,15 @@
 #!/bin/bash
-# Description: This script performs multiple.
+
+# Description: This script performs multiple DNS queries against the 53Prox application.
 # Author: Lincon Freitas
 
-
-# Define the DNS server address
-DNS_SERVER="192.168.178.22"
+DNS_SERVER=`docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 53prox`
 DNS_PORT="53"
 
 # Domain to query
-DOMAIN="amazon.com"
+DOMAIN="google.com"
 
-# Loop to execute dig commands concurrently
+# Loop to execute dig commands concurrently over TCP and UDP
 for i in seq{1..3}; do
   dig @$DNS_SERVER -p $DNS_PORT $DOMAIN +time=1 +tcp &
   dig @$DNS_SERVER -p $DNS_PORT $DOMAIN +time=1 &
